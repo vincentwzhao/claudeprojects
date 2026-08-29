@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Research Project Manager</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="app-header">
+    <h1>Research Project Manager</h1>
+    <p class="subtitle">Track SFU Undergraduate Research Explorers opportunities and connect them to your past work.</p>
+    <div class="header-actions">
+      <button id="exportBtn" class="btn secondary">Export data</button>
+      <label class="btn secondary file-label">
+        Import data
+        <input type="file" id="importInput" accept="application/json" hidden />
+      </label>
+    </div>
+  </header>
+
+  <main>
+    <section class="panel" id="pastPanel">
+      <div class="panel-header">
+        <h2>Past Projects <span class="count" id="pastCount">0</span></h2>
+        <button class="btn primary" id="addPastBtn">+ Add past project</button>
+      </div>
+      <p class="panel-hint">Research, coursework, or personal projects you've already done. Tag them with skills/topics so the app can suggest connections.</p>
+      <div class="card-list" id="pastList"></div>
+    </section>
+
+    <section class="panel" id="oppPanel">
+      <div class="panel-header">
+        <h2>Opportunities <span class="count" id="oppCount">0</span></h2>
+        <button class="btn primary" id="addOppBtn">+ Add opportunity</button>
+      </div>
+      <p class="panel-hint">Projects from the Call for Undergraduate Research Explorers (or elsewhere) you're considering applying to.</p>
+      <div class="filter-bar">
+        <label>Status:
+          <select id="statusFilter">
+            <option value="">All</option>
+            <option>Interested</option>
+            <option>Applying</option>
+            <option>Applied</option>
+            <option>Interview</option>
+            <option>Accepted</option>
+            <option>Rejected</option>
+          </select>
+        </label>
+        <label>Sort by:
+          <select id="sortSelect">
+            <option value="deadline">Deadline</option>
+            <option value="title">Title</option>
+            <option value="status">Status</option>
+          </select>
+        </label>
+      </div>
+      <div class="card-list" id="oppList"></div>
+    </section>
+  </main>
+
+  <div class="modal-backdrop" id="modalBackdrop" hidden>
+    <div class="modal" id="modal"></div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
