@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Study Buddy — Your CMPT Survival Kit</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div class="bg-grid"></div>
+
+  <header class="site-header">
+    <div class="wrap">
+      <span class="logo">&lt;/&gt;</span>
+      <h1>Study Buddy</h1>
+      <p class="tagline">Your ride-or-die for surviving CMPT, one segfault at a time.</p>
+    </div>
+  </header>
+
+  <main class="wrap">
+
+    <!-- Streak / stats bar -->
+    <section class="stats-bar" id="stats-bar">
+      <div class="stat">
+        <span class="stat-value" id="streak-count">0</span>
+        <span class="stat-label">day streak</span>
+      </div>
+      <div class="stat">
+        <span class="stat-value" id="session-count">0</span>
+        <span class="stat-label">sessions today</span>
+      </div>
+      <div class="stat">
+        <span class="stat-value" id="jokes-heard">0</span>
+        <span class="stat-label">jokes survived</span>
+      </div>
+      <button id="checkin-btn" class="btn btn-small">I studied today ✅</button>
+    </section>
+
+    <!-- Motivation generator -->
+    <section class="card hero-card">
+      <h2>Feeling like giving up on your code?</h2>
+      <p id="quote-text" class="quote">"Am I testing my code, or is it testing me?"</p>
+      <div class="hero-actions">
+        <button id="motivate-btn" class="btn btn-primary">Motivate me 🔥</button>
+        <button id="joke-btn" class="btn btn-secondary">Tell me a joke 😂</button>
+      </div>
+      <p id="reaction-text" class="reaction"></p>
+    </section>
+
+    <!-- Pomodoro study timer -->
+    <section class="card timer-card">
+      <h2>Focus Sprint</h2>
+      <p class="muted">Lock in for one round. Your buddy will cheer you on.</p>
+      <div class="timer-display" id="timer-display">25:00</div>
+      <div class="timer-modes">
+        <button class="mode-btn active" data-minutes="25">Study 25</button>
+        <button class="mode-btn" data-minutes="5">Break 5</button>
+        <button class="mode-btn" data-minutes="15">Long break 15</button>
+      </div>
+      <div class="timer-actions">
+        <button id="timer-start" class="btn btn-primary">Start</button>
+        <button id="timer-pause" class="btn btn-secondary" disabled>Pause</button>
+        <button id="timer-reset" class="btn btn-ghost">Reset</button>
+      </div>
+      <p id="timer-message" class="timer-message"></p>
+    </section>
+
+    <!-- CMPT concept flashcards -->
+    <section class="concepts-section">
+      <div class="section-heading">
+        <h2>Concept rescue deck</h2>
+        <p class="muted">Stuck on a topic? Click a card to flip it — and get a pep talk while you're at it.</p>
+      </div>
+      <div class="filter-row" id="filter-row">
+        <button class="filter-btn active" data-filter="all">All</button>
+      </div>
+      <div class="concepts-grid" id="concepts-grid"></div>
+    </section>
+
+    <!-- Debug diary / vent box -->
+    <section class="card vent-card">
+      <h2>Rubber duck debugging corner 🦆</h2>
+      <p class="muted">Type out what's breaking. Nothing is saved anywhere but your own browser — sometimes just writing it out fixes it.</p>
+      <textarea id="duck-input" rows="4" placeholder="Explain your bug to the duck out loud (well, in text)..."></textarea>
+      <button id="duck-btn" class="btn btn-secondary">Ask the duck</button>
+      <p id="duck-response" class="reaction"></p>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <p>Built for every CMPT student staring at a red squiggly line at 2am. You've got this. 💪</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
