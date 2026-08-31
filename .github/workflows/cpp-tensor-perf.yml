@@ -1,0 +1,38 @@
+name: cpp-tensor-perf
+
+on:
+  push:
+    paths:
+      - "cpp-tensor-perf/**"
+      - ".github/workflows/cpp-tensor-perf.yml"
+  pull_request:
+    paths:
+      - "cpp-tensor-perf/**"
+      - ".github/workflows/cpp-tensor-perf.yml"
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        compiler: [g++, clang++]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure
+        working-directory: cpp-tensor-perf
+        run: |
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_CXX_COMPILER=${{ matrix.compiler }}
+
+      - name: Build
+        working-directory: cpp-tensor-perf
+        run: cmake --build build -j
+
+      - name: Test
+        working-directory: cpp-tensor-perf/build
+        run: ctest --output-on-failure
+
+      - name: MLP demo smoke test
+        working-directory: cpp-tensor-perf/build
+        run: ./mlp_demo
