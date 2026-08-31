@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "taskbot"
+version = "0.1.0"
+description = "A personal recurring task/reminder bot as a local CLI application"
+requires-python = ">=3.9"
+dependencies = [
+    "plyer>=2.1",
+]
+
+[project.scripts]
+taskbot = "taskbot.cli:main"
+
+[tool.setuptools]
+packages = ["taskbot"]
