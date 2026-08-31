@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Calorie Tracker</title>
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<div class="app">
+  <header>
+    <h1>Calorie Tracker</h1>
+    <p class="subtitle">Log meals and snacks by ingredient, and see calories add up automatically.</p>
+  </header>
+
+  <section class="today-summary">
+    <div>
+      <span class="today-label">Today</span>
+      <span class="today-kcal" id="today-kcal">0 kcal</span>
+    </div>
+    <div class="today-breakdown" id="today-breakdown"></div>
+  </section>
+
+  <section class="builder">
+    <h2>Log an entry</h2>
+    <form id="entry-meta-form">
+      <div class="row">
+        <div class="field grow">
+          <label for="entry-name">Name</label>
+          <input type="text" id="entry-name" placeholder="e.g. Breakfast, afternoon snack" />
+        </div>
+        <div class="field">
+          <label for="entry-type">Type</label>
+          <select id="entry-type">
+            <option value="meal">Meal</option>
+            <option value="snack">Snack</option>
+          </select>
+        </div>
+      </div>
+      <div class="row">
+        <div class="field">
+          <label for="entry-date">Date</label>
+          <input type="date" id="entry-date" required />
+        </div>
+        <div class="field">
+          <label for="entry-time">Time</label>
+          <input type="time" id="entry-time" required />
+        </div>
+      </div>
+    </form>
+
+    <h3>Ingredients</h3>
+    <form id="ingredient-form" class="ingredient-form">
+      <div class="row">
+        <div class="field grow">
+          <label for="ing-name">Ingredient</label>
+          <input type="text" id="ing-name" list="food-options" placeholder="Search or type a food" autocomplete="off" required />
+          <datalist id="food-options"></datalist>
+        </div>
+        <div class="field small">
+          <label for="ing-qty" id="ing-qty-label">Quantity (g)</label>
+          <input type="number" id="ing-qty" min="0" step="any" value="100" required />
+        </div>
+        <div class="field small">
+          <label for="ing-kcal" id="ing-kcal-label">Calories (per 100 g)</label>
+          <input type="number" id="ing-kcal" min="0" step="any" required />
+        </div>
+      </div>
+      <button type="submit">Add ingredient</button>
+    </form>
+
+    <ul id="ingredient-list" class="ingredient-list"></ul>
+    <div class="builder-total" id="builder-total" hidden>
+      Entry total: <strong id="builder-total-kcal">0 kcal</strong>
+    </div>
+
+    <button id="save-entry" type="button" disabled>Save entry</button>
+  </section>
+
+  <section class="list-section">
+    <h2>History</h2>
+    <div id="empty-state" class="empty-state" hidden>
+      No entries logged yet. Build one above and save it.
+    </div>
+    <div id="history"></div>
+  </section>
+</div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
