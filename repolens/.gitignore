@@ -1,0 +1,24 @@
+# Python
+backend/.venv/
+__pycache__/
+*.pyc
+
+# Repo workspace (cloned repositories analyzed at runtime)
+backend/workspace/*
+!backend/workspace/.gitkeep
+
+# Env files
+.env
+backend/.env
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
+
+# Test artifacts
+.pytest_cache/
