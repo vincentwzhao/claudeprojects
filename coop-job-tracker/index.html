@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Co-op Job Application Tracker</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="app-header">
+      <h1>Co-op Job Application Tracker</h1>
+      <p class="subtitle">Track every application and see how many are CS-related at a glance.</p>
+    </header>
+
+    <section class="stats" id="stats">
+      <div class="stat-card">
+        <span class="stat-value" id="stat-total">0</span>
+        <span class="stat-label">Total Applications</span>
+      </div>
+      <div class="stat-card highlight">
+        <span class="stat-value" id="stat-cs">0</span>
+        <span class="stat-label">CS-Related</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-value" id="stat-cs-pct">0%</span>
+        <span class="stat-label">% CS-Related</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-value" id="stat-interviews">0</span>
+        <span class="stat-label">Interviews</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-value" id="stat-offers">0</span>
+        <span class="stat-label">Offers</span>
+      </div>
+    </section>
+
+    <section class="breakdown">
+      <h2>Status Breakdown</h2>
+      <div id="status-chart" class="bar-chart"></div>
+    </section>
+
+    <section class="form-section">
+      <h2 id="form-title">Add Application</h2>
+      <form id="app-form">
+        <input type="hidden" id="app-id" />
+        <div class="form-row">
+          <label>
+            Company
+            <input type="text" id="field-company" required placeholder="e.g. Shopify" />
+          </label>
+          <label>
+            Role Title
+            <input type="text" id="field-role" required placeholder="e.g. Software Engineer Intern" />
+          </label>
+        </div>
+        <div class="form-row">
+          <label>
+            Date Applied
+            <input type="date" id="field-date" required />
+          </label>
+          <label>
+            Category
+            <select id="field-category">
+              <option value="cs">CS-Related</option>
+              <option value="non-cs">Non-CS</option>
+            </select>
+          </label>
+          <label>
+            Status
+            <select id="field-status">
+              <option value="applied">Applied</option>
+              <option value="oa">Online Assessment</option>
+              <option value="interview">Interview</option>
+              <option value="offer">Offer</option>
+              <option value="rejected">Rejected</option>
+              <option value="ghosted">Ghosted</option>
+            </select>
+          </label>
+        </div>
+        <div class="form-row">
+          <label class="grow">
+            Link / Notes
+            <input type="text" id="field-notes" placeholder="posting URL or notes" />
+          </label>
+        </div>
+        <div class="form-actions">
+          <button type="submit" id="submit-btn">Add Application</button>
+          <button type="button" id="cancel-edit-btn" class="secondary" hidden>Cancel Edit</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="table-section">
+      <div class="table-controls">
+        <h2>Applications</h2>
+        <div class="filters">
+          <select id="filter-category">
+            <option value="all">All Categories</option>
+            <option value="cs">CS-Related</option>
+            <option value="non-cs">Non-CS</option>
+          </select>
+          <select id="filter-status">
+            <option value="all">All Statuses</option>
+            <option value="applied">Applied</option>
+            <option value="oa">Online Assessment</option>
+            <option value="interview">Interview</option>
+            <option value="offer">Offer</option>
+            <option value="rejected">Rejected</option>
+            <option value="ghosted">Ghosted</option>
+          </select>
+          <button id="export-csv-btn" class="secondary">Export CSV</button>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table id="app-table">
+          <thead>
+            <tr>
+              <th>Company</th>
+              <th>Role</th>
+              <th>Date Applied</th>
+              <th>Category</th>
+              <th>Status</th>
+              <th>Notes</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="app-table-body"></tbody>
+        </table>
+        <p id="empty-state" class="empty-state" hidden>No applications yet. Add your first one above.</p>
+      </div>
+    </section>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
