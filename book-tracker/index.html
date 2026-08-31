@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Book Tracker</title>
+<style>
+  :root {
+    --bg: #f7f5f2;
+    --surface: #ffffff;
+    --border: #e3ddd4;
+    --text: #2b2620;
+    --text-dim: #7a7266;
+    --accent: #a15c3e;
+    --accent-hover: #8a4c32;
+    --accent-soft: #f1e3da;
+    --danger: #b3432f;
+    --star: #d9a441;
+    --star-off: #ddd6cb;
+    --radius: 10px;
+    --shadow: 0 1px 3px rgba(43, 38, 32, 0.08);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1b1815;
+      --surface: #262220;
+      --border: #3a352f;
+      --text: #ece7df;
+      --text-dim: #9c9285;
+      --accent: #d68a5f;
+      --accent-hover: #e39d74;
+      --accent-soft: #3a2c22;
+      --danger: #e07356;
+      --star: #e0b45c;
+      --star-off: #45403a;
+      --shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+      color-scheme: dark;
+    }
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    padding: 24px 16px 64px;
+  }
+  .wrap { max-width: 920px; margin: 0 auto; }
+
+  header { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+  h1 { font-size: 1.5rem; margin: 0; font-weight: 700; }
+  h1 span { color: var(--accent); }
+  .subtitle { color: var(--text-dim); font-size: 0.85rem; margin-top: 4px; }
+
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; margin-bottom: 20px; }
+  .stat { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 14px; box-shadow: var(--shadow); }
+  .stat .n { font-size: 1.4rem; font-weight: 700; }
+  .stat .l { font-size: 0.72rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.04em; }
+
+  .panel { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); padding: 16px; margin-bottom: 18px; }
+  .panel h2 { font-size: 0.95rem; margin: 0 0 12px; }
+
+  form.add-form { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; }
+  form.add-form .full { grid-column: 1 / -1; }
+  form.add-form .col2 { grid-column: span 2; }
+  form.add-form .col3 { grid-column: span 3; }
+  @media (max-width: 700px) {
+    form.add-form { grid-template-columns: repeat(2, 1fr); }
+    form.add-form .col2, form.add-form .col3 { grid-column: span 2; }
+  }
+
+  label { display: block; font-size: 0.72rem; color: var(--text-dim); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.03em; }
+  input[type=text], input[type=date], select, textarea {
+    width: 100%; padding: 8px 10px; border: 1px solid var(--border); border-radius: 7px;
+    background: var(--bg); color: var(--text); font-size: 0.88rem; font-family: inherit;
+  }
+  textarea { resize: vertical; min-height: 40px; }
+  input:focus, select:focus, textarea:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
+
+  .star-picker { display: flex; gap: 2px; font-size: 1.3rem; line-height: 1; padding-top: 4px; }
+  .star-picker button { background: none; border: none; cursor: pointer; padding: 0; color: var(--star-off); }
+  .star-picker button.on { color: var(--star); }
+
+  button { font-family: inherit; cursor: pointer; }
+  .btn { background: var(--accent); color: #fff; border: none; border-radius: 7px; padding: 9px 16px; font-size: 0.88rem; font-weight: 600; }
+  .btn:hover { background: var(--accent-hover); }
+  .btn.secondary { background: transparent; color: var(--text); border: 1px solid var(--border); }
+  .btn.secondary:hover { background: var(--accent-soft); }
+  .btn.small { padding: 5px 10px; font-size: 0.78rem; }
+
+  .toolbar { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 14px; }
+  .tabs { display: flex; gap: 6px; }
+  .tab { border: 1px solid var(--border); background: var(--surface); color: var(--text-dim); border-radius: 999px; padding: 6px 13px; font-size: 0.8rem; }
+  .tab.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .search { flex: 1; min-width: 160px; }
+  .search input { padding: 8px 10px; }
+
+  .book-list { display: flex; flex-direction: column; gap: 10px; }
+  .book {
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 12px 14px; box-shadow: var(--shadow); display: flex; gap: 12px; align-items: flex-start; flex-wrap: wrap;
+  }
+  .book .main { flex: 1; min-width: 200px; }
+  .book .title { font-weight: 700; font-size: 0.98rem; }
+  .book .author { color: var(--text-dim); font-size: 0.85rem; }
+  .book .meta { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
+  .badge { font-size: 0.7rem; padding: 2px 8px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+  .badge.status-reading { background: #dfeadf; color: #3d7a3d; }
+  .badge.status-want { background: #e4e0f5; color: #5c4fa8; }
+  @media (prefers-color-scheme: dark) {
+    .badge.status-reading { background: #24352a; color: #7fc98a; }
+    .badge.status-want { background: #2b2740; color: #b0a4e8; }
+  }
+  .book .notes { margin-top: 6px; font-size: 0.83rem; color: var(--text-dim); white-space: pre-wrap; }
+  .book .stars { color: var(--star); font-size: 0.85rem; letter-spacing: 1px; margin-top: 4px; }
+  .book .date { font-size: 0.75rem; color: var(--text-dim); }
+  .book .actions { display: flex; gap: 6px; }
+
+  .empty { text-align: center; color: var(--text-dim); padding: 40px 0; font-size: 0.9rem; }
+
+  .io-row { display: flex; gap: 8px; justify-content: flex-end; margin-top: 10px; }
+  input[type=file] { display: none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1>📚 Book <span>Tracker</span></h1>
+      <div class="subtitle">Audible, Libby, and everything else — in one shelf.</div>
+    </div>
+  </header>
+
+  <div class="stats" id="stats"></div>
+
+  <div class="panel">
+    <h2>Add a book</h2>
+    <form class="add-form" id="addForm">
+      <div class="col3">
+        <label>Title</label>
+        <input type="text" id="f-title" required>
+      </div>
+      <div class="col3">
+        <label>Author</label>
+        <input type="text" id="f-author">
+      </div>
+
+      <div class="col2">
+        <label>Source</label>
+        <select id="f-source">
+          <option>Audible</option>
+          <option>Libby</option>
+          <option>Physical</option>
+          <option>Kindle</option>
+          <option>Spotify</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="col2">
+        <label>Format</label>
+        <select id="f-format">
+          <option>Audiobook</option>
+          <option>Ebook</option>
+          <option>Print</option>
+        </select>
+      </div>
+      <div class="col2">
+        <label>Status</label>
+        <select id="f-status">
+          <option value="finished">Finished</option>
+          <option value="reading">Reading</option>
+          <option value="want">Want to read</option>
+        </select>
+      </div>
+
+      <div class="col2">
+        <label>Finished date</label>
+        <input type="date" id="f-date">
+      </div>
+      <div class="col2">
+        <label>Rating</label>
+        <div class="star-picker" id="f-rating" data-value="0"></div>
+      </div>
+      <div class="col2"></div>
+
+      <div class="full">
+        <label>Notes / review</label>
+        <textarea id="f-notes" placeholder="Optional thoughts, quotes, why you picked it up..."></textarea>
+      </div>
+
+      <div class="full">
+        <button type="submit" class="btn">Add book</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="toolbar">
+    <div class="tabs" id="tabs">
+      <button class="tab active" data-filter="all">All</button>
+      <button class="tab" data-filter="finished">Finished</button>
+      <button class="tab" data-filter="reading">Reading</button>
+      <button class="tab" data-filter="want">Want to read</button>
+    </div>
+    <div class="search">
+      <input type="text" id="search" placeholder="Search title, author, notes...">
+    </div>
+  </div>
+
+  <div class="book-list" id="bookList"></div>
+
+  <div class="io-row">
+    <button class="btn secondary small" id="exportBtn">Export JSON</button>
+    <button class="btn secondary small" id="importBtn">Import JSON</button>
+    <input type="file" id="importFile" accept="application/json">
+  </div>
+</div>
+
+<script>
+const STORAGE_KEY = 'book-tracker.books.v1';
+
+function load() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; }
+  catch { return []; }
+}
+function save(books) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(books));
+}
+
+let books = load();
+let filter = 'all';
+let query = '';
+
+const statusLabel = { finished: 'Finished', reading: 'Reading', want: 'Want to read' };
+
+function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
+
+function renderStars(container, value, editable) {
+  container.innerHTML = '';
+  for (let i = 1; i <= 5; i++) {
+    const el = editable ? document.createElement('button') : document.createElement('span');
+    if (editable) el.type = 'button';
+    el.textContent = '★';
+    el.className = i <= value ? 'on' : '';
+    if (editable) {
+      el.addEventListener('click', () => {
+        const cur = Number(container.dataset.value) || 0;
+        const next = cur === i ? 0 : i;
+        container.dataset.value = next;
+        renderStars(container, next, true);
+      });
+    }
+    container.appendChild(el);
+  }
+}
+renderStars(document.getElementById('f-rating'), 0, true);
+
+function renderStats() {
+  const finished = books.filter(b => b.status === 'finished');
+  const thisYear = finished.filter(b => b.finishedDate && b.finishedDate.slice(0, 4) === String(new Date().getFullYear()));
+  const reading = books.filter(b => b.status === 'reading');
+  const bySource = {};
+  finished.forEach(b => { bySource[b.source] = (bySource[b.source] || 0) + 1; });
+  const topSource = Object.entries(bySource).sort((a, b) => b[1] - a[1])[0];
+
+  const stats = [
+    { n: finished.length, l: 'Finished' },
+    { n: thisYear.length, l: String(new Date().getFullYear()) },
+    { n: reading.length, l: 'Currently reading' },
+    { n: topSource ? `${topSource[0]}` : '—', l: 'Top source' },
+  ];
+  document.getElementById('stats').innerHTML = stats.map(s =>
+    `<div class="stat"><div class="n">${s.n}</div><div class="l">${s.l}</div></div>`
+  ).join('');
+}
+
+function renderList() {
+  const list = document.getElementById('bookList');
+  let items = books.filter(b => filter === 'all' || b.status === filter);
+  if (query.trim()) {
+    const q = query.trim().toLowerCase();
+    items = items.filter(b =>
+      (b.title || '').toLowerCase().includes(q) ||
+      (b.author || '').toLowerCase().includes(q) ||
+      (b.notes || '').toLowerCase().includes(q)
+    );
+  }
+  items = items.slice().sort((a, b) => {
+    const da = a.finishedDate || '';
+    const db = b.finishedDate || '';
+    if (da !== db) return db.localeCompare(da);
+    return (a.title || '').localeCompare(b.title || '');
+  });
+
+  if (!items.length) {
+    list.innerHTML = '<div class="empty">No books here yet.</div>';
+    return;
+  }
+
+  list.innerHTML = '';
+  items.forEach(b => {
+    const el = document.createElement('div');
+    el.className = 'book';
+    const starsHtml = b.rating ? `<div class="stars">${'★'.repeat(b.rating)}${'☆'.repeat(5 - b.rating)}</div>` : '';
+    el.innerHTML = `
+      <div class="main">
+        <div class="title">${escapeHtml(b.title)}</div>
+        <div class="author">${escapeHtml(b.author || 'Unknown author')}</div>
+        <div class="meta">
+          <span class="badge">${escapeHtml(b.source)}</span>
+          <span class="badge">${escapeHtml(b.format)}</span>
+          <span class="badge status-${b.status}">${statusLabel[b.status]}</span>
+          ${b.finishedDate ? `<span class="date">${escapeHtml(b.finishedDate)}</span>` : ''}
+        </div>
+        ${starsHtml}
+        ${b.notes ? `<div class="notes">${escapeHtml(b.notes)}</div>` : ''}
+      </div>
+      <div class="actions">
+        <button class="btn secondary small" data-action="delete" data-id="${b.id}">Delete</button>
+      </div>
+    `;
+    list.appendChild(el);
+  });
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+
+function renderAll() {
+  renderStats();
+  renderList();
+}
+
+document.getElementById('addForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const status = document.getElementById('f-status').value;
+  const book = {
+    id: uid(),
+    title: document.getElementById('f-title').value.trim(),
+    author: document.getElementById('f-author').value.trim(),
+    source: document.getElementById('f-source').value,
+    format: document.getElementById('f-format').value,
+    status,
+    finishedDate: status === 'finished' ? document.getElementById('f-date').value : '',
+    rating: Number(document.getElementById('f-rating').dataset.value) || 0,
+    notes: document.getElementById('f-notes').value.trim(),
+  };
+  if (!book.title) return;
+  books.push(book);
+  save(books);
+  e.target.reset();
+  document.getElementById('f-rating').dataset.value = 0;
+  renderStars(document.getElementById('f-rating'), 0, true);
+  renderAll();
+});
+
+document.getElementById('bookList').addEventListener('click', e => {
+  const btn = e.target.closest('button[data-action="delete"]');
+  if (!btn) return;
+  if (!confirm('Delete this book from your tracker?')) return;
+  books = books.filter(b => b.id !== btn.dataset.id);
+  save(books);
+  renderAll();
+});
+
+document.getElementById('tabs').addEventListener('click', e => {
+  const tab = e.target.closest('.tab');
+  if (!tab) return;
+  filter = tab.dataset.filter;
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t === tab));
+  renderList();
+});
+
+document.getElementById('search').addEventListener('input', e => {
+  query = e.target.value;
+  renderList();
+});
+
+document.getElementById('exportBtn').addEventListener('click', () => {
+  const blob = new Blob([JSON.stringify(books, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'book-tracker-export.json';
+  a.click();
+  URL.revokeObjectURL(a.href);
+});
+
+document.getElementById('importBtn').addEventListener('click', () => {
+  document.getElementById('importFile').click();
+});
+document.getElementById('importFile').addEventListener('change', e => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      const imported = JSON.parse(reader.result);
+      if (!Array.isArray(imported)) throw new Error('not an array');
+      const existingIds = new Set(books.map(b => b.id));
+      imported.forEach(b => {
+        if (!b.id || existingIds.has(b.id)) b.id = uid();
+        books.push(b);
+      });
+      save(books);
+      renderAll();
+    } catch {
+      alert('Could not read that file — expected a JSON export from this tracker.');
+    }
+  };
+  reader.readAsText(file);
+  e.target.value = '';
+});
+
+renderAll();
+</script>
+</body>
+</html>
