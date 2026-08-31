@@ -1,0 +1,264 @@
+:root {
+  color-scheme: light dark;
+  --bg: #f7f7f5;
+  --card: #ffffff;
+  --text: #1a1a1a;
+  --muted: #6b6b6b;
+  --border: #e4e4e0;
+  --accent: #a4271e;
+  --payment: #a4271e;
+  --enrollment: #b5651d;
+  --academic: #2f5d50;
+  --other: #4a4a68;
+  --danger-bg: #fdecea;
+  --warn-bg: #fff6e5;
+  --ok-bg: #eef7ee;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #17181a;
+    --card: #212226;
+    --text: #f0f0ef;
+    --muted: #9a9a9a;
+    --border: #34353a;
+    --danger-bg: #3a1f1d;
+    --warn-bg: #3a2f16;
+    --ok-bg: #1c2e21;
+  }
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+.wrap {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 32px 20px 64px;
+}
+
+header h1 {
+  margin: 0 0 6px;
+  font-size: 1.6rem;
+}
+
+.subtitle {
+  color: var(--muted);
+  font-size: 0.92rem;
+  line-height: 1.5;
+  margin: 0 0 24px;
+}
+
+.subtitle a { color: inherit; }
+
+.hero {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.hero-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.hero-number {
+  font-size: 3rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.hero-label {
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.add-panel {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 28px;
+}
+
+.add-panel h2 {
+  margin: 0 0 12px;
+  font-size: 1rem;
+}
+
+#addForm {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+}
+
+@media (min-width: 560px) {
+  #addForm {
+    grid-template-columns: 2fr 1fr 1fr;
+    grid-template-areas:
+      "title date category"
+      "notes notes button";
+  }
+  #title { grid-area: title; }
+  #date { grid-area: date; }
+  #category { grid-area: category; }
+  #notes { grid-area: notes; }
+  #addForm button { grid-area: button; }
+}
+
+#addForm input,
+#addForm select {
+  padding: 9px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 0.9rem;
+}
+
+#addForm button {
+  padding: 9px 14px;
+  border-radius: 8px;
+  border: none;
+  background: var(--accent);
+  color: #fff;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+#addForm button:hover { opacity: 0.9; }
+
+.section-heading h2 {
+  font-size: 1rem;
+  margin: 0 0 10px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-weight: 600;
+}
+
+.deadline-list {
+  list-style: none;
+  margin: 0 0 24px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.deadline-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+
+.deadline-item.done {
+  opacity: 0.55;
+}
+
+.deadline-item.done .deadline-title {
+  text-decoration: line-through;
+}
+
+.deadline-item input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.deadline-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.deadline-title {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.deadline-meta {
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin-top: 2px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+.badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #fff;
+  text-transform: capitalize;
+}
+
+.badge.payment { background: var(--payment); }
+.badge.enrollment { background: var(--enrollment); }
+.badge.academic { background: var(--academic); }
+.badge.other { background: var(--other); }
+
+.countdown {
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.countdown.urgent { background: var(--danger-bg); color: var(--payment); }
+.countdown.soon { background: var(--warn-bg); color: var(--enrollment); }
+.countdown.normal { background: var(--ok-bg); color: var(--academic); }
+.countdown.past { background: transparent; color: var(--muted); }
+
+.delete-btn {
+  background: none;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 1.1rem;
+  line-height: 1;
+  padding: 4px;
+  flex-shrink: 0;
+}
+
+.delete-btn:hover { color: var(--payment); }
+
+.empty-state {
+  color: var(--muted);
+  font-size: 0.88rem;
+  margin: 0 0 24px;
+}
+
+footer {
+  text-align: center;
+  margin-top: 16px;
+}
+
+.link-btn {
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-size: 0.82rem;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 6px;
+}

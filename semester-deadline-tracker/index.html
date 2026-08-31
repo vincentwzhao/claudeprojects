@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Semester Deadline Tracker</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>Semester Deadline Tracker</h1>
+      <p class="subtitle">
+        Payment &amp; other important dates before the semester starts.
+        Seeded from
+        <a href="https://www.sfu.ca/students/deadlines/fall.html" target="_blank" rel="noopener">SFU's Fall Dates &amp; Deadlines page</a>
+        — add anything missing from that page.
+      </p>
+    </header>
+
+    <section class="hero" id="hero">
+      <div class="hero-stat">
+        <span class="hero-number" id="nextDays">–</span>
+        <span class="hero-label" id="nextLabel">No upcoming deadlines</span>
+      </div>
+    </section>
+
+    <section class="add-panel">
+      <h2>Add a deadline</h2>
+      <form id="addForm">
+        <input type="text" id="title" placeholder="e.g. Tuition payment due" required />
+        <input type="date" id="date" required />
+        <select id="category">
+          <option value="payment">Payment</option>
+          <option value="enrollment">Enrollment</option>
+          <option value="academic">Academic</option>
+          <option value="other">Other</option>
+        </select>
+        <input type="text" id="notes" placeholder="Notes / source (optional)" />
+        <button type="submit">Add</button>
+      </form>
+    </section>
+
+    <section>
+      <div class="section-heading">
+        <h2>Upcoming</h2>
+      </div>
+      <ul class="deadline-list" id="upcomingList"></ul>
+      <p class="empty-state" id="upcomingEmpty" hidden>Nothing upcoming — add a deadline above.</p>
+    </section>
+
+    <section>
+      <div class="section-heading">
+        <h2>Past</h2>
+      </div>
+      <ul class="deadline-list" id="pastList"></ul>
+      <p class="empty-state" id="pastEmpty" hidden>Nothing here yet.</p>
+    </section>
+
+    <footer>
+      <button id="resetBtn" class="link-btn">Reset to default SFU dates</button>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
